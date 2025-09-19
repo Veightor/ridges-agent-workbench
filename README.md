@@ -15,6 +15,18 @@ This workbench provides a clean, repeatable way to:
 - Local `ridges/` repository cloned and set up
 - Chutes API key configured in `ridges/proxy/.env`
 
+## ⚠️ Setup Status
+
+**Current Status**: Workbench infrastructure complete, ridges dependencies need installation
+
+- ✅ **Workbench**: Fully functional
+- ✅ **Scripts**: Working (creates runs, saves metadata)
+- ✅ **Documentation**: Complete
+- ✅ **API Key**: Configured
+- ⏳ **Ridges Dependencies**: Need installation for full functionality
+
+**Next Step**: Follow `SETUP_GUIDE.md` to complete ridges environment setup
+
 ## Quick Start
 
 1. **Set up the Ridges repo** (if not already done):
