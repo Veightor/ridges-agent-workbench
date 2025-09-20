@@ -1,8 +1,14 @@
+# Runtime outputs and logs
+runs/
+
 # Virtual environments
 venv/
 env/
 .venv/
 .env/
+ENV/
+env.bak/
+venv.bak/
 
 # Python
 __pycache__/
@@ -25,10 +31,13 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
-# Test runs (keep structure but ignore content)
-runs/*/
-!runs/.gitkeep
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # IDE
 .vscode/
@@ -39,15 +48,16 @@ runs/*/
 
 # OS
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 
 # Logs
 *.log
-
-# Environment variables
-.env
-.env.local
-.env.*.local
+logs/
 
 # Temporary files
 *.tmp
