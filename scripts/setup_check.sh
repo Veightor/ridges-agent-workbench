@@ -51,38 +51,73 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
+# Function to find the best available Python version (3.11+ preferred)
+find_best_python() {
+    # Check for specific versions first (prefer 3.11+)
+    for version in python3.13 python3.12 python3.11; do
+        if command_exists "$version"; then
+            echo "$version"
+            return 0
+        fi
+    done
+    
+    # Check for python3.10 (minimum for some dependencies)
+    if command_exists python3.10; then
+        echo "python3.10"
+        return 0
+    fi
+    
+    # Fall back to python3 (might be older)
+    if command_exists python3; then
+        echo "python3"
+        return 0
+    fi
+    
+    # No suitable Python found
+    return 1
+}
+
+# Global variable to store the best Python command
+BEST_PYTHON=""
+
 # Function to check Python version
 check_python() {
     print_header "Checking Python Installation"
     
-    if command_exists python3; then
-        PYTHON_VERSION=$(python3 --version 2>&1 | cut -d' ' -f2)
+    # Find the best available Python version
+    if BEST_PYTHON=$(find_best_python); then
+        PYTHON_VERSION=$($BEST_PYTHON --version 2>&1 | cut -d' ' -f2)
         PYTHON_MAJOR=$(echo $PYTHON_VERSION | cut -d'.' -f1)
         PYTHON_MINOR=$(echo $PYTHON_VERSION | cut -d'.' -f2)
         
         if [ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -ge 11 ]; then
-            print_success "Python $PYTHON_VERSION found (requirement: 3.11+)"
+            print_success "Python $PYTHON_VERSION found using $BEST_PYTHON (requirement: 3.11+)"
+        elif [ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -ge 10 ]; then
+            print_warning "Python $PYTHON_VERSION found using $BEST_PYTHON (3.11+ recommended)"
+            print_info "Some features may require Python 3.11+. Consider upgrading:"
+            print_info "  macOS: brew install python@3.11"
         else
-            print_error "Python $PYTHON_VERSION found, but 3.11+ is required"
+            print_error "Python $PYTHON_VERSION found using $BEST_PYTHON, but 3.11+ is required"
             print_info "Please install Python 3.11 or later:"
             print_info "  macOS: brew install python@3.11"
             print_info "  Ubuntu: sudo apt install python3.11"
             print_info "  Or download from: https://www.python.org/downloads/"
         fi
     else
-        print_error "Python3 not found"
+        print_error "No suitable Python3 found"
         print_info "Please install Python 3.11+:"
         print_info "  macOS: brew install python@3.11"
         print_info "  Ubuntu: sudo apt install python3.11"
         print_info "  Or download from: https://www.python.org/downloads/"
+        return 1
     fi
     
-    # Check for pip
-    if command_exists pip3; then
-        print_success "pip3 found"
+    # Check for pip with the selected Python version
+    if $BEST_PYTHON -m pip --version >/dev/null 2>&1; then
+        print_success "pip found for $BEST_PYTHON"
     else
-        print_error "pip3 not found"
-        print_info "Install pip3 with: python3 -m ensurepip --upgrade"
+        print_warning "pip not found for $BEST_PYTHON"
+        print_info "Install pip with: $BEST_PYTHON -m ensurepip --upgrade"
     fi
 }
 
@@ -241,11 +276,24 @@ check_ridges_venv() {
         else
             print_error "Virtual environment not found at $VENV_PATH"
             print_info "Create virtual environment in ridges directory:"
-            print_info "  cd ../ridges && python3 -m venv .venv-linux"
+            if [ -n "$BEST_PYTHON" ]; then
+                print_info "  cd ../ridges && $BEST_PYTHON -m venv .venv-linux"
+            else
+                print_info "  cd ../ridges && python3 -m venv .venv-linux"
+            fi
             
-            # Automatically create virtual environment
-            if [ -d "$RIDGES_PATH" ]; then
-                print_info "Auto-creating virtual environment..."
+            # Automatically create virtual environment using best Python
+            if [ -d "$RIDGES_PATH" ] && [ -n "$BEST_PYTHON" ]; then
+                print_info "Auto-creating virtual environment using $BEST_PYTHON..."
+                cd "$RIDGES_PATH"
+                if $BEST_PYTHON -m venv .venv-linux; then
+                    print_fix "Virtual environment created successfully with $BEST_PYTHON"
+                else
+                    print_error "Failed to create virtual environment with $BEST_PYTHON"
+                fi
+                cd - >/dev/null
+            elif [ -d "$RIDGES_PATH" ]; then
+                print_info "Auto-creating virtual environment with default python3..."
                 cd "$RIDGES_PATH"
                 if python3 -m venv .venv-linux; then
                     print_fix "Virtual environment created successfully"
@@ -392,17 +440,17 @@ main() {
         print_info "Please review the issues above and follow the suggested solutions."
         
         # Check for critical issues that prevent running tests
-        if ! command_exists python3; then
-            print_error "CRITICAL: Python3 not found - cannot proceed with tests"
+        if [ -z "$BEST_PYTHON" ] || ! command_exists "$BEST_PYTHON"; then
+            print_error "CRITICAL: No suitable Python found - cannot proceed with tests"
             return 1
         fi
         
-        PYTHON_VERSION=$(python3 --version 2>&1 | cut -d' ' -f2)
+        PYTHON_VERSION=$($BEST_PYTHON --version 2>&1 | cut -d' ' -f2)
         PYTHON_MAJOR=$(echo $PYTHON_VERSION | cut -d'.' -f1)
         PYTHON_MINOR=$(echo $PYTHON_VERSION | cut -d'.' -f2)
         
         if [ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -lt 11 ]; then
-            print_error "CRITICAL: Python $PYTHON_VERSION found, but 3.11+ required - cannot proceed with tests"
+            print_error "CRITICAL: Python $PYTHON_VERSION found using $BEST_PYTHON, but 3.11+ required - cannot proceed with tests"
             return 1
         fi
         
