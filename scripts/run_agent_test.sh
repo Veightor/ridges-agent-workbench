@@ -5,6 +5,21 @@
 
 set -e  # Exit on any error
 
+# Get the directory of this script
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Run setup verification first
+echo "Running setup verification..."
+if ! bash "${SCRIPT_DIR}/setup_check.sh"; then
+    echo ""
+    echo "=========================================="
+    echo "Setup verification failed!"
+    echo "Please resolve the critical issues above before running tests."
+    echo "=========================================="
+    exit 1
+fi
+echo ""
+
 # Default arguments
 DEFAULT_AGENT_PATH="miner/top_agent_tmp.py"
 DEFAULT_NUM_PROBLEMS=1
@@ -36,13 +51,13 @@ EOF
 
 # Get git commit info from ridges directory
 echo "Capturing git commit information..."
-if [ -d "ridges/.git" ]; then
-    cd ridges
-    echo "Git Commit: $(git rev-parse HEAD)" > "../${RUN_DIR}/git_commit.txt"
-    echo "Git Branch: $(git branch --show-current)" >> "../${RUN_DIR}/git_commit.txt"
-    echo "Git Status:" >> "../${RUN_DIR}/git_commit.txt"
-    git status --porcelain >> "../${RUN_DIR}/git_commit.txt"
-    cd ..
+if [ -d "../ridges/.git" ]; then
+    cd ../ridges
+    echo "Git Commit: $(git rev-parse HEAD)" > "../ridges-agent-workbench/${RUN_DIR}/git_commit.txt"
+    echo "Git Branch: $(git branch --show-current)" >> "../ridges-agent-workbench/${RUN_DIR}/git_commit.txt"
+    echo "Git Status:" >> "../ridges-agent-workbench/${RUN_DIR}/git_commit.txt"
+    git status --porcelain >> "../ridges-agent-workbench/${RUN_DIR}/git_commit.txt"
+    cd ../ridges-agent-workbench
 else
     echo "Warning: ridges/.git not found, skipping git commit info"
     echo "Git info not available - ridges directory not found or not a git repo" > "${RUN_DIR}/git_commit.txt"
@@ -52,7 +67,7 @@ fi
 echo "Starting agent test..."
 echo "Command: python ridges.py test-agent --agent-file ${AGENT_PATH} --num-problems ${NUM_PROBLEMS} --problem-set ${PROBLEM_SET} --timeout ${TIMEOUT} --verbose"
 
-cd ridges
+cd ../ridges
 source .venv-linux/bin/activate
 python ridges.py test-agent \
     --agent-file "${AGENT_PATH}" \
@@ -60,9 +75,9 @@ python ridges.py test-agent \
     --problem-set "${PROBLEM_SET}" \
     --timeout "${TIMEOUT}" \
     --verbose \
-    2>&1 | tee "../${RUN_DIR}/run.log"
+    2>&1 | tee "../ridges-agent-workbench/${RUN_DIR}/run.log"
 
-cd ..
+cd ../ridges-agent-workbench
 
 # Print summary
 echo ""

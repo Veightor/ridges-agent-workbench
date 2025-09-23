@@ -195,21 +195,17 @@ check_ridges_repo() {
         print_info "Clone the ridges repository to the parent directory:"
         print_info "  cd .. && git clone https://github.com/ridgesai/ridges.git ridges"
         
-        # Offer to clone the official ridges repository
-        read -p "Would you like me to clone the official ridges repository? (y/n): " -n 1 -r
-        echo ""
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-            REPO_URL="https://github.com/ridgesai/ridges.git"
-            print_info "Cloning ridges repository from $REPO_URL..."
-            cd ..
-            if git clone "$REPO_URL" ridges; then
-                print_fix "Ridges repository cloned successfully"
-                cd ridges-agent-workbench
-            else
-                print_error "Failed to clone ridges repository"
-                print_info "You can manually clone it with: cd .. && git clone $REPO_URL ridges"
-                cd ridges-agent-workbench
-            fi
+        # Automatically clone the official ridges repository
+        REPO_URL="https://github.com/ridgesai/ridges.git"
+        print_info "Auto-cloning ridges repository from $REPO_URL..."
+        cd ..
+        if git clone "$REPO_URL" ridges; then
+            print_fix "Ridges repository cloned successfully"
+            cd ridges-agent-workbench
+        else
+            print_error "Failed to clone ridges repository"
+            print_info "You can manually clone it with: cd .. && git clone $REPO_URL ridges"
+            cd ridges-agent-workbench
         fi
     fi
 }
@@ -247,20 +243,16 @@ check_ridges_venv() {
             print_info "Create virtual environment in ridges directory:"
             print_info "  cd ../ridges && python3 -m venv .venv-linux"
             
-            # Offer to create virtual environment
+            # Automatically create virtual environment
             if [ -d "$RIDGES_PATH" ]; then
-                read -p "Would you like me to create the virtual environment? (y/n): " -n 1 -r
-                echo ""
-                if [[ $REPLY =~ ^[Yy]$ ]]; then
-                    print_info "Creating virtual environment..."
-                    cd "$RIDGES_PATH"
-                    if python3 -m venv .venv-linux; then
-                        print_fix "Virtual environment created successfully"
-                    else
-                        print_error "Failed to create virtual environment"
-                    fi
-                    cd - >/dev/null
+                print_info "Auto-creating virtual environment..."
+                cd "$RIDGES_PATH"
+                if python3 -m venv .venv-linux; then
+                    print_fix "Virtual environment created successfully"
+                else
+                    print_error "Failed to create virtual environment"
                 fi
+                cd - >/dev/null
             fi
         fi
     else
@@ -295,17 +287,13 @@ check_api_key() {
             print_info "Add your Chutes API key:"
             print_info "  echo 'CHUTES_API_KEY=your_api_key_here' > $ENV_FILE"
             
-            # Offer to create the file
-            read -p "Would you like me to create the .env file template? (y/n): " -n 1 -r
-            echo ""
-            if [[ $REPLY =~ ^[Yy]$ ]]; then
-                mkdir -p "$PROXY_DIR"
-                echo "# Chutes API Configuration" > "$ENV_FILE"
-                echo "# Replace 'your_api_key_here' with your actual API key" >> "$ENV_FILE"
-                echo "CHUTES_API_KEY=your_api_key_here" >> "$ENV_FILE"
-                print_fix "Environment file template created at $ENV_FILE"
-                print_info "Please edit the file and add your actual API key"
-            fi
+            # Automatically create the file
+            mkdir -p "$PROXY_DIR"
+            echo "# Chutes API Configuration" > "$ENV_FILE"
+            echo "# Replace 'your_api_key_here' with your actual API key" >> "$ENV_FILE"
+            echo "CHUTES_API_KEY=your_api_key_here" >> "$ENV_FILE"
+            print_fix "Environment file template created at $ENV_FILE"
+            print_info "Please edit the file and add your actual API key"
         else
             print_error "Proxy directory not found at $PROXY_DIR"
             print_info "Ensure the ridges repository is properly cloned with all directories"
@@ -350,8 +338,17 @@ test_basic_functionality() {
             if python ridges.py --help >/dev/null 2>&1; then
                 print_success "Ridges script is functional"
             else
-                print_warning "Ridges script may have dependency issues"
-                print_info "Try installing dependencies with: pip install -r requirements.txt"
+                print_warning "Ridges script has dependency issues - installing dependencies..."
+                if pip install -r requirements.txt; then
+                    print_fix "Dependencies installed successfully"
+                    if python ridges.py --help >/dev/null 2>&1; then
+                        print_success "Ridges script is now functional"
+                    else
+                        print_warning "Ridges script still has issues after dependency installation"
+                    fi
+                else
+                    print_error "Failed to install dependencies"
+                fi
             fi
             deactivate 2>/dev/null || true
         else
@@ -367,7 +364,7 @@ test_basic_functionality() {
 # Main execution
 main() {
     print_header "Ridges Agent Workbench - Setup Verification"
-    print_info "This script will check all prerequisites and attempt to fix common issues."
+    print_info "This script will check all prerequisites and automatically fix issues."
     print_info "Working directory: $(pwd)"
     
     # Run all checks
@@ -386,12 +383,41 @@ main() {
     if [ $ISSUES_FOUND -eq 0 ]; then
         print_success "All checks passed! Your setup appears to be ready."
         print_info "You can now run: bash scripts/run_agent_test.sh"
+        return 0
     else
         print_warning "Found $ISSUES_FOUND issue(s) that need attention."
         if [ $FIXES_APPLIED -gt 0 ]; then
             print_info "Applied $FIXES_APPLIED automatic fix(es)."
         fi
         print_info "Please review the issues above and follow the suggested solutions."
+        
+        # Check for critical issues that prevent running tests
+        if ! command_exists python3; then
+            print_error "CRITICAL: Python3 not found - cannot proceed with tests"
+            return 1
+        fi
+        
+        PYTHON_VERSION=$(python3 --version 2>&1 | cut -d' ' -f2)
+        PYTHON_MAJOR=$(echo $PYTHON_VERSION | cut -d'.' -f1)
+        PYTHON_MINOR=$(echo $PYTHON_VERSION | cut -d'.' -f2)
+        
+        if [ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -lt 11 ]; then
+            print_error "CRITICAL: Python $PYTHON_VERSION found, but 3.11+ required - cannot proceed with tests"
+            return 1
+        fi
+        
+        if [ ! -d "../ridges" ]; then
+            print_error "CRITICAL: Ridges repository not available - cannot proceed with tests"
+            return 1
+        fi
+        
+        if [ ! -d "../ridges/.venv-linux" ]; then
+            print_error "CRITICAL: Virtual environment not available - cannot proceed with tests"
+            return 1
+        fi
+        
+        print_info "Setup has some issues but basic requirements are met - proceeding with tests"
+        return 0
     fi
     
     echo -e "\n${BLUE}For more information, see the README.md file.${NC}"
