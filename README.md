@@ -39,12 +39,29 @@ Ensure the downloaded agent contains:
 - Proper error handling and return format: `{"patch": "...diff..."}`
 - No unauthorized outbound network calls (only proxy endpoints allowed)
 
+## Setup Verification
+
+Before running tests, verify your setup is correct:
+
+```bash
+# Check all prerequisites and auto-fix issues
+bash scripts/setup_check.sh
+```
+
+This script will:
+- ✅ Verify Python 3.11+, Git, Docker are installed
+- ✅ Clone ridges repository if missing, or pull latest changes
+- ✅ Create virtual environment with correct Python version
+- ✅ Install dependencies and resolve conflicts
+- ✅ Check API key configuration (warns if still template)
+- ✅ Verify agent file is downloaded and ready
+
 ## Running Tests
 
 ### Basic Usage
 
 ```bash
-# Run with default parameters (1 easy problem, 300s timeout)
+# Setup verification runs automatically before each test
 bash scripts/run_agent_test.sh
 
 # Run with custom parameters

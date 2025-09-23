@@ -321,13 +321,20 @@ check_api_key() {
     if [ -f "$ENV_FILE" ]; then
         print_success "Environment file found at $ENV_FILE"
         
-        # Check for API key (without revealing it)
-        if grep -q "CHUTES_API_KEY=" "$ENV_FILE" && [ -n "$(grep "CHUTES_API_KEY=" "$ENV_FILE" | cut -d'=' -f2)" ]; then
-            print_success "Chutes API key found in environment file"
+        # Check for API key and validate it's not the template
+        if grep -q "CHUTES_API_KEY=" "$ENV_FILE"; then
+            API_KEY_VALUE=$(grep "CHUTES_API_KEY=" "$ENV_FILE" | cut -d'=' -f2)
+            if [ -n "$API_KEY_VALUE" ] && [ "$API_KEY_VALUE" != "your_api_key_here" ]; then
+                print_success "Chutes API key configured in environment file"
+            else
+                print_error "Chutes API key is still set to template value"
+                print_info "Edit $ENV_FILE and replace 'your_api_key_here' with your actual Chutes API key"
+                print_info "Get your API key from the Chutes platform"
+            fi
         else
-            print_error "Chutes API key not found or empty in $ENV_FILE"
+            print_error "Chutes API key not found in $ENV_FILE"
             print_info "Add your Chutes API key to $ENV_FILE:"
-            print_info "  echo 'CHUTES_API_KEY=your_api_key_here' >> $ENV_FILE"
+            print_info "  echo 'CHUTES_API_KEY=your_actual_api_key' >> $ENV_FILE"
         fi
     else
         print_error "Environment file not found at $ENV_FILE"
@@ -372,6 +379,29 @@ check_ridges_script() {
     else
         print_error "Ridges script not found at $RIDGES_SCRIPT"
         print_info "Ensure the ridges repository is properly cloned"
+    fi
+}
+
+# Function to check for agent file
+check_agent_file() {
+    print_header "Checking Agent File"
+    
+    AGENT_FILE="../ridges/miner/top_agent_tmp.py"
+    
+    if [ -f "$AGENT_FILE" ]; then
+        FILE_SIZE=$(wc -c < "$AGENT_FILE" 2>/dev/null || echo "0")
+        if [ "$FILE_SIZE" -gt 50000 ]; then  # 50KB+ indicates a real agent
+            print_success "Agent file found at $AGENT_FILE (${FILE_SIZE} bytes)"
+        else
+            print_warning "Agent file found but appears too small (${FILE_SIZE} bytes)"
+            print_info "Download a complete agent (typically 300KB+) and save to:"
+            print_info "  ridges/miner/top_agent_tmp.py"
+        fi
+    else
+        print_error "Agent file not found at $AGENT_FILE"
+        print_info "Download an agent from the Ridges platform and save it to:"
+        print_info "  ridges/miner/top_agent_tmp.py"
+        print_info "Agent should contain agent_main(input_dict) function"
     fi
 }
 
@@ -461,6 +491,7 @@ main() {
     check_ridges_venv
     check_api_key
     check_ridges_script
+    check_agent_file
     test_basic_functionality
     
     # Summary
