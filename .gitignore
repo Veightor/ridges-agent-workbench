@@ -94,3 +94,7 @@ logs/
 # Temporary files
 *.tmp
 *.tempridges/
+
+# Ridges repository (should be cloned separately)
+ridges/
+/ridges/
