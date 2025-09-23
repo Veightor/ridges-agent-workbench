@@ -208,22 +208,26 @@ check_ridges_repo() {
         if [ -d "$RIDGES_PATH/.git" ]; then
             print_success "Ridges is a git repository"
             
-            # Check git status
+            # Check git status and pull latest changes
             cd "$RIDGES_PATH"
             CURRENT_BRANCH=$(git branch --show-current 2>/dev/null || echo "unknown")
             print_info "Current branch: $CURRENT_BRANCH"
             
             # Check for uncommitted changes
             if [ -n "$(git status --porcelain)" ]; then
-                print_warning "Ridges repository has uncommitted changes"
+                print_warning "Ridges repository has uncommitted changes - skipping pull"
             else
-                print_success "Ridges repository is clean"
+                print_info "Pulling latest changes from remote..."
+                if git pull origin main >/dev/null 2>&1; then
+                    print_fix "Repository updated to latest version"
+                else
+                    print_warning "Failed to pull latest changes (may be offline or no updates)"
+                fi
             fi
             cd - >/dev/null
         else
             print_error "Ridges directory exists but is not a git repository"
-            print_info "Clone the ridges repository to the parent directory:"
-            print_info "  cd .. && git clone https://github.com/ridgesai/ridges.git ridges"
+            print_info "Remove the directory and clone fresh, or manually initialize git"
         fi
     else
         print_error "Ridges directory not found at $RIDGES_PATH"
@@ -387,15 +391,49 @@ test_basic_functionality() {
                 print_success "Ridges script is functional"
             else
                 print_warning "Ridges script has dependency issues - installing dependencies..."
-                if pip install -r requirements.txt; then
-                    print_fix "Dependencies installed successfully"
+                
+                # Try different dependency installation strategies
+                DEPENDENCY_INSTALLED=false
+                
+                # Strategy 1: Try installing with pip
+                print_info "Attempting pip install..."
+                if pip install -r requirements.txt >/dev/null 2>&1; then
+                    DEPENDENCY_INSTALLED=true
+                    print_fix "Dependencies installed successfully with pip"
+                else
+                    print_warning "pip install failed due to dependency conflicts"
+                    
+                    # Strategy 2: Try upgrading pip and installing again
+                    print_info "Upgrading pip and retrying..."
+                    pip install --upgrade pip >/dev/null 2>&1
+                    if pip install -r requirements.txt >/dev/null 2>&1; then
+                        DEPENDENCY_INSTALLED=true
+                        print_fix "Dependencies installed successfully after pip upgrade"
+                    else
+                        print_warning "pip install still failing after upgrade"
+                        
+                        # Strategy 3: Try installing with --force-reinstall and --no-deps for problematic packages
+                        print_info "Attempting to resolve dependency conflicts..."
+                        if pip install -r requirements.txt --force-reinstall --no-deps >/dev/null 2>&1; then
+                            # Install dependencies separately to resolve conflicts
+                            pip install aiobotocore botocore boto3 s3transfer >/dev/null 2>&1
+                            DEPENDENCY_INSTALLED=true
+                            print_fix "Dependencies installed with conflict resolution"
+                        else
+                            print_error "All dependency installation strategies failed"
+                        fi
+                    fi
+                fi
+                
+                # Test if ridges.py works now
+                if [ "$DEPENDENCY_INSTALLED" = true ]; then
                     if python ridges.py --help >/dev/null 2>&1; then
                         print_success "Ridges script is now functional"
                     else
-                        print_warning "Ridges script still has issues after dependency installation"
+                        print_error "Ridges script still has issues after dependency installation"
                     fi
                 else
-                    print_error "Failed to install dependencies"
+                    print_error "Failed to install dependencies - ridges.py cannot run"
                 fi
             fi
             deactivate 2>/dev/null || true
@@ -462,6 +500,21 @@ main() {
         if [ ! -d "../ridges/.venv-linux" ]; then
             print_error "CRITICAL: Virtual environment not available - cannot proceed with tests"
             return 1
+        fi
+        
+        # Check if ridges.py can actually run (dependencies installed)
+        if [ -f "../ridges/ridges.py" ]; then
+            cd ../ridges
+            if source .venv-linux/bin/activate && python ridges.py --help >/dev/null 2>&1; then
+                cd ../ridges-agent-workbench
+                print_info "Setup has some issues but core functionality works - proceeding with tests"
+                return 0
+            else
+                cd ../ridges-agent-workbench
+                print_error "CRITICAL: Ridges dependencies not properly installed - cannot proceed with tests"
+                print_info "Run the setup script manually: bash scripts/setup_check.sh"
+                return 1
+            fi
         fi
         
         print_info "Setup has some issues but basic requirements are met - proceeding with tests"
