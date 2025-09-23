@@ -1,7 +1,5 @@
 # Ridges Agent Workbench
 
-# Ridges Agent Workbench
-
 Personal workbench for working with the Ridges AI agent system and running reproducible local evaluations.
 
 ## Prerequisites
