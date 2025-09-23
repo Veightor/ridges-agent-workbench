@@ -1,4 +1,36 @@
-# Runtime outputs and logs
+# Ignore runs directory (temporary files, logs, outputs)
+runs/
+
+# Ignore Python virtual environments
+venv/
+.venv/
+env/
+.env/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore environment variables files
+.env
+.env.local
+
+# Ignore logs
+*.log
+logs/# Runtime outputs and logs
 runs/
 
 # Virtual environments
@@ -61,4 +93,4 @@ logs/
 
 # Temporary files
 *.tmp
-*.temp
+*.tempridges/
