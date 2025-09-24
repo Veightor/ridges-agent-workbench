@@ -181,3 +181,13 @@ If you encounter issues:
 ## Version History
 
 - **v0.1.0**: Initial release with automated testing wrapper and comprehensive logging
+
+## Agent Source
+
+**Agent Used**: Production ridges miner agent (agent.py → top_agent_tmp.py)  
+**Source**: Built-in ridges repository agent code (120KB)  
+**Location**: `ridges/miner/top_agent_tmp.py` (created from `ridges/miner/agent.py`)  
+**Function**: `agent_main(input_dict)` returning `{"patch": "..."}`  
+
+**Note**: Instead of using the Explore dashboard, we used the existing production-ready agent code found in the ridges repository. This provides a more robust and tested agent implementation.
+
