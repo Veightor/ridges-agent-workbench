@@ -1,0 +1,1 @@
+Git info not available - ridges directory not found or not a git repo

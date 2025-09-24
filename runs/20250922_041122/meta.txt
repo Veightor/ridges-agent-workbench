@@ -1,0 +1,5 @@
+Run Date: Mon Sep 22 04:11:22 EDT 2025
+Agent Path: ../ridges/miner/top_agent_tmp.py
+Number of Problems: 2
+Problem Set: medium
+Timeout: 900s

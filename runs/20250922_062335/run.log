@@ -1,0 +1,93 @@
+No Datadog API key or app key found, skipping Datadog logging
+No validator/.env found, using defaults
+╭────────────────────────────────  Local Test ─────────────────────────────────╮
+│ 🧪 Testing Agent Locally                                                     │
+│ Agent: miner/top_agent_tmp.py                                                │
+│ Problems: 1 from easy set                                                    │
+│ Timeout: 300s per problem                                                    │
+╰──────────────────────────────────────────────────────────────────────────────╯
+🚀 Starting proxy...
+ Starting proxy server...
+✅ Proxy started
+🔧 Setting up local testing environment...
+No validator/.env found, using defaults
+Docker is running
+/bin/sh: 1: uv: not found
+Image ghcr.io/ridgesai/ridges/sandbox:latest already exists
+Image ghcr.io/ridgesai/ridges/proxy:latest already exists
+Pulling common commit-specific test images...
+Image ghcr.io/ridgesai/ridges/sandbox-astropy__astropy-14309:latest already 
+exists
+Image ghcr.io/ridgesai/ridges/sandbox-django__django-11119:latest already exists
+Image ghcr.io/ridgesai/ridges/sandbox-psf__requests-5414:latest already exists
+Image ghcr.io/ridgesai/ridges/sandbox-psf__requests-6028:latest already exists
+Image ghcr.io/ridgesai/ridges/sandbox-pylint-dev__pylint-7277:latest already 
+exists
+SWE-bench available
+Using API URL: http://localhost:8000
+Using Proxy URL: http://localhost:8001
+Local testing environment ready!
+Created Docker client pool with 4 clients for parallel evaluations
+Created network: local-test-286e69cb
+Started proxy container: sandbox-proxy
+Using proxy URL: http://sandbox-proxy
+Loading problem set...
+Selected 1 problems from easy set
+Timeout per test: 300s
+Agent file: miner/top_agent_tmp.py
+
+Skipping Docker image building due to memory constraints...
+Using existing base images for evaluation
+
+Creating evaluation tasks...
+Starting 1 evaluations in parallel...
+
+Individual results will be displayed as each test completes.
+
+Starting test 1/1: psf__requests-5414
+   Cloning repository: psf/requests...
+[detached HEAD 5f1ce3e4] updates
+ 1 file changed, 2 insertions(+)
+[LocalSandboxManager] Applied test_patch for psf__requests-5414
+[LocalSandboxManager] git/patch output:
+Checking patch tests/test_requests.py...
+Applied patch tests/test_requests.py cleanly.
+
+[LocalSandboxManager] Committed test_patch for psf__requests-5414
+   Repository ready, running evaluation...
+   Test 1 timed out after 300s
+Completed test 1/1 - psf__requests-5414
+╭─────────────────── [TIMEOUT] Test 1/1: psf__requests-5414 ───────────────────╮
+│ Status: TIMEOUT                                                              │
+│ Duration: 300.0s                                                             │
+│                                                                              │
+│ Test Execution Log:                                                          │
+│ Repository cloned to:                                                        │
+│ /tmp/ridges_local_test_4j_6h8mt/sandbox_5e53f1d9-54d0-4ef5-af55-87f83c02a4cc │
+│ /repo                                                                        │
+│ Using existing image: ghcr.io/ridgesai/ridges/sandbox:latest                 │
+│ Started sandbox container                                                    │
+│ Evaluation timed out after 300s                                              │
+│                                                                              │
+│ Error:                                                                       │
+│ Evaluation timed out after 300s                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+All 1 evaluations completed!
+Total time: 309.9s
+Results: 0/1 solved (0.0%)
+╭──────────────────────────────── Test Summary ────────────────────────────────╮
+│ ✅ Solved: 0/1 (0.0%)                                                        │
+│  Average time: 300.0s                                                        │
+│ 🔧 Patches generated: 0/1                                                    │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Individual Results:
+❌ psf__requests-5414: TIMEOUT (300.0s)
+   Error: Evaluation timed out after 300s...
+🧹 Cleaning up...
+Cleaned up Docker client pool
+Removed proxy container: sandbox-proxy
+Error removing network: 403 Client Error for http+docker://localhost/v1.51/networks/40c0728f4c5462cad11c51bda6c701d62e691067006747be765ddd3ba34a5d57: Forbidden ("error while removing network: network local-test-286e69cb has active endpoints (name:"strange_saha" id:"f438471f4d31")")
+Removed temp directory: /tmp/ridges_local_test_4j_6h8mt
+🛑 Proxy stopped

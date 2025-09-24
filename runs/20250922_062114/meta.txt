@@ -1,0 +1,5 @@
+Run Date: Mon Sep 22 06:21:14 EDT 2025
+Agent Path: miner/top_agent_tmp.py
+Number of Problems: 1
+Problem Set: easy
+Timeout: 300s

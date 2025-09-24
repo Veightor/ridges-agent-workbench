@@ -1,0 +1,5 @@
+Run Date: Mon Sep 22 06:37:21 EDT 2025
+Agent Path: miner/test_simple_agent.py
+Number of Problems: 1
+Problem Set: easy
+Timeout: 30s

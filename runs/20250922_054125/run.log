@@ -1,0 +1,52 @@
+No Datadog API key or app key found, skipping Datadog logging
+No validator/.env found, using defaults
+╭───────────────────────────────────────────────────────────────────────────────────────────  Local Test ───────────────────────────────────────────────────────────────────────────────────────────╮
+│ 🧪 Testing Agent Locally                                                                                                                                                                          │
+│ Agent: miner/top_agent_tmp.py                                                                                                                                                                     │
+│ Problems: 2 from medium set                                                                                                                                                                       │
+│ Timeout: 900s per problem                                                                                                                                                                         │
+╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+🚀 Starting proxy...
+✅ Proxy started
+🔧 Setting up local testing environment...
+No validator/.env found, using defaults
+Docker is running
+Image ghcr.io/ridgesai/ridges/sandbox:latest already exists
+Image ghcr.io/ridgesai/ridges/proxy:latest already exists
+Pulling common commit-specific test images...
+Image ghcr.io/ridgesai/ridges/sandbox-astropy__astropy-14309:latest already exists
+Image ghcr.io/ridgesai/ridges/sandbox-django__django-11119:latest already exists
+ Starting proxy server...
+Image ghcr.io/ridgesai/ridges/sandbox-psf__requests-5414:latest already exists
+Image ghcr.io/ridgesai/ridges/sandbox-psf__requests-6028:latest already exists
+Image ghcr.io/ridgesai/ridges/sandbox-pylint-dev__pylint-7277:latest already exists
+SWE-bench available
+Using API URL: http://localhost:8000
+Using Proxy URL: http://localhost:8001
+Local testing environment ready!
+warning: `VIRTUAL_ENV=.venv-linux` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+Created Docker client pool with 4 clients for parallel evaluations
+Created network: local-test-a54a2d75
+Started proxy container: sandbox-proxy
+Using proxy URL: http://sandbox-proxy
+Loading problem set...
+Selected 2 problems from medium set
+Timeout per test: 900s
+Agent file: miner/top_agent_tmp.py
+
+Pre-building SWE-bench environment images for parallel execution...
+INFO:     Started server process [9298]
+INFO:     Waiting for application startup.
+2025-09-22 05:42:32,560 - __main__ - INFO - Starting proxy server...
+2025-09-22 05:42:32,561 - __main__ - WARNING - WARNING: Neither SCREENER_PASSWORD nor WHITELISTED_VALIDATOR_IPS is set!
+2025-09-22 05:42:32,561 - __main__ - WARNING - WARNING: All inference and embedding requests will be rejected!
+2025-09-22 05:42:32,561 - __main__ - WARNING - WARNING: Please set SCREENER_PASSWORD or WHITELISTED_VALIDATOR_IPS environment variables.
+2025-09-22 05:42:32,561 - __main__ - INFO - Running in dev mode - skipping database connection
+INFO:     Application startup complete.
+ERROR:    [Errno 98] error while attempting to bind on address ('0.0.0.0', 8001): address already in use
+INFO:     Waiting for application shutdown.
+2025-09-22 05:42:32,562 - __main__ - INFO - Shutting down proxy server...
+2025-09-22 05:42:32,562 - __main__ - INFO - Dev mode - no database connection to close
+INFO:     Application shutdown complete.
+No Datadog API key or app key found, skipping Datadog logging
+Starting Chutes Proxy Server on 0.0.0.0:8001

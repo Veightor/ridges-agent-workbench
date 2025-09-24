@@ -1,0 +1,147 @@
+No Datadog API key or app key found, skipping Datadog logging
+No validator/.env found, using defaults
+╭───────────────────────────────────────────────────────────────────────────────────────────  Local Test ───────────────────────────────────────────────────────────────────────────────────────────╮
+│ 🧪 Testing Agent Locally                                                                                                                                                                          │
+│ Agent: miner/top_agent_tmp.py                                                                                                                                                                     │
+│ Problems: 1 from easy set                                                                                                                                                                         │
+│ Timeout: 300s per problem                                                                                                                                                                         │
+╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+🚀 Starting proxy...
+✅ Proxy started
+🔧 Setting up local testing environment...
+No validator/.env found, using defaults
+Docker is running
+Image ghcr.io/ridgesai/ridges/sandbox:latest already exists
+Image ghcr.io/ridgesai/ridges/proxy:latest already exists
+Pulling common commit-specific test images...
+Image ghcr.io/ridgesai/ridges/sandbox-astropy__astropy-14309:latest already exists
+Image ghcr.io/ridgesai/ridges/sandbox-django__django-11119:latest already exists
+Image ghcr.io/ridgesai/ridges/sandbox-psf__requests-5414:latest already exists
+Image ghcr.io/ridgesai/ridges/sandbox-psf__requests-6028:latest already exists
+Image ghcr.io/ridgesai/ridges/sandbox-pylint-dev__pylint-7277:latest already exists
+SWE-bench available
+Using API URL: http://localhost:8000
+Using Proxy URL: http://localhost:8001
+Local testing environment ready!
+ Starting proxy server...
+warning: `VIRTUAL_ENV=.venv-linux` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+Created Docker client pool with 4 clients for parallel evaluations
+Created network: local-test-9d151e20
+Started proxy container: sandbox-proxy
+Using proxy URL: http://sandbox-proxy
+Loading problem set...
+Selected 1 problems from easy set
+Timeout per test: 300s
+Agent file: miner/top_agent_tmp.py
+
+Pre-building SWE-bench environment images for parallel execution...
+INFO:     Started server process [8083]
+INFO:     Waiting for application startup.
+2025-09-22 02:28:41,487 - __main__ - INFO - Starting proxy server...
+2025-09-22 02:28:41,487 - __main__ - WARNING - WARNING: Neither SCREENER_PASSWORD nor WHITELISTED_VALIDATOR_IPS is set!
+2025-09-22 02:28:41,488 - __main__ - WARNING - WARNING: All inference and embedding requests will be rejected!
+2025-09-22 02:28:41,488 - __main__ - WARNING - WARNING: Please set SCREENER_PASSWORD or WHITELISTED_VALIDATOR_IPS environment variables.
+2025-09-22 02:28:41,488 - __main__ - INFO - Running in dev mode - skipping database connection
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+Traceback (most recent call last):
+  File "/mnt/c/Users/USER/Documents/GitHub/ridges-agent-workbench/ridges/.venv-linux/lib/python3.12/site-packages/swebench/harness/docker_build.py", line 148, in build_image
+    raise docker.errors.BuildError(
+docker.errors.BuildError: The command '/bin/sh -c /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"' returned a non-zero code: 137
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/USER/Documents/GitHub/ridges-agent-workbench/ridges/.venv-linux/lib/python3.12/site-packages/swebench/harness/utils.py", line 102, in run_threadpool
+    future.result()
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/usr/lib/python3.12/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/USER/Documents/GitHub/ridges-agent-workbench/ridges/.venv-linux/lib/python3.12/site-packages/swebench/harness/docker_build.py", line 154, in build_image
+    raise BuildImageError(image_name, str(e), logger) from e
+swebench.harness.docker_build.BuildImageError: Error building image sweb.env.py.x86_64.1f92e6d7cef88badc4f744:latest: The command '/bin/sh -c /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"' returned a non-zero code: 137
+Check (logs/build_images/env/sweb.env.py.x86_64.1f92e6d7cef88badc4f744__latest/build_image.log) for more information.
+[LocalSandboxManager] Pre-building SWE-bench environment images for parallel evaluation...
+Base image sweb.base.py.x86_64:latest already exists, skipping build.
+Base images built successfully.
+Total environment images to build: 1
+<class 'swebench.harness.docker_build.BuildImageError'>: Error building image sweb.env.py.x86_64.1f92e6d7cef88badc4f744:latest: The command '/bin/sh -c /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"' returned a non-zero code: 137
+Check (logs/build_images/env/sweb.env.py.x86_64.1f92e6d7cef88badc4f744__latest/build_image.log) for more information.
+1 environment images failed to build.
+[LocalSandboxManager] Pre-built environment images for 1 problems
+Environment images ready for parallel evaluation
+
+Creating evaluation tasks...
+Starting 1 evaluations in parallel...
+
+Individual results will be displayed as each test completes.
+
+Starting test 1/1: psf__requests-5414
+   Cloning repository: psf/requests...
+[detached HEAD 7d539b81] updates
+ 1 file changed, 2 insertions(+)
+[LocalSandboxManager] Applied test_patch for psf__requests-5414
+[LocalSandboxManager] git/patch output:
+Checking patch tests/test_requests.py...
+Applied patch tests/test_requests.py cleanly.
+
+[LocalSandboxManager] Committed test_patch for psf__requests-5414
+   Repository ready, running evaluation...
+Completed test 1/1 - psf__requests-5414
+╭────────────────────────────────────────────────────────────────────────────── [FAILED] Test 1/1: psf__requests-5414 ──────────────────────────────────────────────────────────────────────────────╮
+│ Status: FAILED                                                                                                                                                                                    │
+│ Duration: 12.7s                                                                                                                                                                                   │
+│                                                                                                                                                                                                   │
+│ Test Execution Log:                                                                                                                                                                               │
+│ Repository cloned to: /tmp/ridges_local_test_0bgt0ewe/sandbox_207be87c-8090-41fb-a44e-0ba38f4025f6/repo                                                                                           │
+│ Sandbox execution failed: Sandbox execution failed: Resource ID was not provided                                                                                                                  │
+│ Traceback: Traceback (most recent call last):                                                                                                                                                     │
+│   File "/mnt/c/Users/USER/Documents/GitHub/ridges-agent-workbench/ridges/validator/local_testing/local_manager.py", line 472, in run_agent                                                        │
+│     self.local_manager.docker.images.get(sandbox_image)                                                                                                                                           │
+│   File "/mnt/c/Users/USER/Documents/GitHub/ridges-agent-workbench/ridges/.venv-linux/lib/python3.12/site-packages/docker/models/images.py", line 333, in get                                      │
+│     return self.prepare_model(self.client.api.inspect_image(name))                                                                                                                                │
+│                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                                                                 │
+│   File "/mnt/c/Users/USER/Documents/GitHub/ridges-agent-workbench/ridges/.venv-linux/lib/python3.12/site-packages/docker/utils/decorators.py", line 16, in wrapped                                │
+│     raise errors.NullResource(                                                                                                                                                                    │
+│ docker.errors.NullResource: Resource ID was not provided                                                                                                                                          │
+│                                                                                                                                                                                                   │
+│                                                                                                                                                                                                   │
+│ Error:                                                                                                                                                                                            │
+│ Sandbox execution failed: Resource ID was not provided                                                                                                                                            │
+│ Traceback: Traceback (most recent call last):                                                                                                                                                     │
+│   File "/mnt/c/Users/USER/Documents/GitHub/ridges-agent-workbench/ridges/validator/local_testing/local_manager.py", line 472, in run_agent                                                        │
+│     self.local_manager.docker.images.get(sandbox_image)                                                                                                                                           │
+│   File "/mnt/c/Users/USER/Documents/GitHub/ridges-agent-workbench/ridges/.venv-linux/lib/python3.12/site-packages/docker/models/images.py", line 333, in get                                      │
+│     return self.prepare_model(self.client.api.i... (truncated)                                                                                                                                    │
+╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+All 1 evaluations completed!
+Total time: 94.4s
+Results: 0/1 solved (0.0%)
+╭────────────────────────────────────────────────────────────────────────────────────────── Test Summary ───────────────────────────────────────────────────────────────────────────────────────────╮
+│ ✅ Solved: 0/1 (0.0%)                                                                                                                                                                             │
+│  Average time: 12.7s                                                                                                                                                                              │
+│ 🔧 Patches generated: 0/1                                                                                                                                                                         │
+╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+Individual Results:
+❌ psf__requests-5414: FAILED (12.7s)
+   Error: Sandbox execution failed: Resource ID was not provided
+Traceback: Traceback (most recent call last):...
+🧹 Cleaning up...
+Cleaned up Docker client pool
+Removed proxy container: sandbox-proxy
+Removed network: local-test-9d151e20
+Removed temp directory: /tmp/ridges_local_test_0bgt0ewe
+🛑 Proxy stopped
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2025-09-22 02:30:03,816 - __main__ - INFO - Shutting down proxy server...
+2025-09-22 02:30:03,823 - __main__ - INFO - Dev mode - no database connection to close
+INFO:     Application shutdown complete.
+INFO:     Finished server process [8083]

@@ -1,4 +1,3 @@
-runs/
 
 # Ignore Python virtual environments
 venv/
@@ -30,7 +29,6 @@ Thumbs.db
 # Ignore logs
 *.log
 logs/# Runtime outputs and logs
-runs/
 
 # Virtual environments
 venv/

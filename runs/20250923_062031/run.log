@@ -1,0 +1,121 @@
+No Datadog API key or app key found, skipping Datadog logging
+No validator/.env found, using defaults
+╭───────────────────────────────────────────────────────────────────────────────────────────  Local Test ───────────────────────────────────────────────────────────────────────────────────────────╮
+│ 🧪 Testing Agent Locally                                                                                                                                                                          │
+│ Agent: miner/top_agent_tmp.py                                                                                                                                                                     │
+│ Problems: 1 from easy set                                                                                                                                                                         │
+│ Timeout: 300s per problem                                                                                                                                                                         │
+╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+🚀 Starting proxy...
+✅ Proxy started
+🔧 Setting up local testing environment...
+No validator/.env found, using defaults
+Docker is running
+Image ghcr.io/ridgesai/ridges/sandbox:latest already exists
+Image ghcr.io/ridgesai/ridges/proxy:latest already exists
+Pulling common commit-specific test images...
+ Starting proxy server...
+Image ghcr.io/ridgesai/ridges/sandbox-astropy__astropy-14309:latest already exists
+Image ghcr.io/ridgesai/ridges/sandbox-django__django-11119:latest already exists
+warning: `VIRTUAL_ENV=.venv-linux` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+Image ghcr.io/ridgesai/ridges/sandbox-psf__requests-5414:latest already exists
+Image ghcr.io/ridgesai/ridges/sandbox-psf__requests-6028:latest already exists
+Image ghcr.io/ridgesai/ridges/sandbox-pylint-dev__pylint-7277:latest already exists
+SWE-bench available
+Using API URL: http://localhost:8000
+Using Proxy URL: http://localhost:8001
+Local testing environment ready!
+Created Docker client pool with 4 clients for parallel evaluations
+Created network: local-test-da9f740e
+Started proxy container: sandbox-proxy
+Using proxy URL: http://sandbox-proxy
+Loading problem set...
+Selected 1 problems from easy set
+Timeout per test: 300s
+Agent file: miner/top_agent_tmp.py
+
+Skipping Docker image building due to memory constraints...
+Using existing base images for evaluation
+
+Creating evaluation tasks...
+Starting 1 evaluations in parallel...
+
+Individual results will be displayed as each test completes.
+
+Starting test 1/1: psf__requests-5414
+   Cloning repository: psf/requests...
+INFO:     Started server process [1819]
+INFO:     Waiting for application startup.
+2025-09-23 06:21:44,437 - __main__ - INFO - Starting proxy server...
+2025-09-23 06:21:44,437 - __main__ - WARNING - WARNING: Neither SCREENER_PASSWORD nor WHITELISTED_VALIDATOR_IPS is set!
+2025-09-23 06:21:44,437 - __main__ - WARNING - WARNING: All inference and embedding requests will be rejected!
+2025-09-23 06:21:44,437 - __main__ - WARNING - WARNING: Please set SCREENER_PASSWORD or WHITELISTED_VALIDATOR_IPS environment variables.
+2025-09-23 06:21:44,437 - __main__ - INFO - Running in dev mode - skipping database connection
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+[detached HEAD 65b354a9] updates
+ 1 file changed, 2 insertions(+)
+[LocalSandboxManager] Applied test_patch for psf__requests-5414
+[LocalSandboxManager] git/patch output:
+Checking patch tests/test_requests.py...
+Applied patch tests/test_requests.py cleanly.
+
+[LocalSandboxManager] Committed test_patch for psf__requests-5414
+   Repository ready, running evaluation...
+2025-09-23 06:21:48,785 - httpx - INFO - HTTP Request: POST https://llm.chutes.ai/v1/chat/completions "HTTP/1.1 402 Payment Required"
+2025-09-23 06:21:48,786 - proxy.providers.chutes_provider - ERROR - Chutes API request failed for run None (model: deepseek-ai/DeepSeek-V3-0324): 402 - {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}
+2025-09-23 06:21:48,787 - proxy.providers.inference_manager - ERROR - Chutes inference failed for run None: status 402, response: {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}
+2025-09-23 06:21:48,787 - __main__ - INFO - Inference result raw: {'error': 'Error in inference request: {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}'}
+No Datadog API key or app key found, skipping Datadog logging
+Starting Chutes Proxy Server on 0.0.0.0:8001
+INFO:     172.22.0.2:57622 - "POST /agents/inference HTTP/1.1" 200 OK
+2025-09-23 06:21:51,852 - httpx - INFO - HTTP Request: POST https://llm.chutes.ai/v1/chat/completions "HTTP/1.1 402 Payment Required"
+2025-09-23 06:21:51,852 - proxy.providers.chutes_provider - ERROR - Chutes API request failed for run None (model: zai-org/GLM-4.5-FP8): 402 - {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}
+2025-09-23 06:21:51,853 - proxy.providers.inference_manager - ERROR - Chutes inference failed for run None: status 402, response: {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}
+2025-09-23 06:21:51,853 - __main__ - INFO - Inference result raw: {'error': 'Error in inference request: {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}'}
+INFO:     172.22.0.2:57626 - "POST /agents/inference HTTP/1.1" 200 OK
+2025-09-23 06:21:55,454 - httpx - INFO - HTTP Request: POST https://llm.chutes.ai/v1/chat/completions "HTTP/1.1 402 Payment Required"
+2025-09-23 06:21:55,455 - proxy.providers.chutes_provider - ERROR - Chutes API request failed for run None (model: moonshotai/Kimi-K2-Instruct): 402 - {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}
+2025-09-23 06:21:55,455 - proxy.providers.inference_manager - ERROR - Chutes inference failed for run None: status 402, response: {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}
+2025-09-23 06:21:55,456 - __main__ - INFO - Inference result raw: {'error': 'Error in inference request: {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}'}
+INFO:     172.22.0.2:57628 - "POST /agents/inference HTTP/1.1" 200 OK
+2025-09-23 06:22:00,207 - httpx - INFO - HTTP Request: POST https://llm.chutes.ai/v1/chat/completions "HTTP/1.1 402 Payment Required"
+2025-09-23 06:22:00,207 - proxy.providers.chutes_provider - ERROR - Chutes API request failed for run None (model: deepseek-ai/DeepSeek-V3-0324): 402 - {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}
+2025-09-23 06:22:00,208 - proxy.providers.inference_manager - ERROR - Chutes inference failed for run None: status 402, response: {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}
+2025-09-23 06:22:00,208 - __main__ - INFO - Inference result raw: {'error': 'Error in inference request: {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}'}
+INFO:     172.22.0.2:53710 - "POST /agents/inference HTTP/1.1" 200 OK
+2025-09-23 06:22:07,582 - httpx - INFO - HTTP Request: POST https://llm.chutes.ai/v1/chat/completions "HTTP/1.1 402 Payment Required"
+2025-09-23 06:22:07,582 - proxy.providers.chutes_provider - ERROR - Chutes API request failed for run None (model: zai-org/GLM-4.5-FP8): 402 - {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}
+2025-09-23 06:22:07,583 - proxy.providers.inference_manager - ERROR - Chutes inference failed for run None: status 402, response: {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}
+2025-09-23 06:22:07,583 - __main__ - INFO - Inference result raw: {'error': 'Error in inference request: {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}'}
+INFO:     172.22.0.2:53716 - "POST /agents/inference HTTP/1.1" 200 OK
+2025-09-23 06:22:20,979 - httpx - INFO - HTTP Request: POST https://llm.chutes.ai/v1/chat/completions "HTTP/1.1 402 Payment Required"
+2025-09-23 06:22:20,980 - proxy.providers.chutes_provider - ERROR - Chutes API request failed for run None (model: moonshotai/Kimi-K2-Instruct): 402 - {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}
+2025-09-23 06:22:20,981 - proxy.providers.inference_manager - ERROR - Chutes inference failed for run None: status 402, response: {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}
+2025-09-23 06:22:20,981 - __main__ - INFO - Inference result raw: {'error': 'Error in inference request: {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}'}
+INFO:     172.22.0.2:45152 - "POST /agents/inference HTTP/1.1" 200 OK
+2025-09-23 06:22:33,918 - httpx - INFO - HTTP Request: POST https://llm.chutes.ai/v1/chat/completions "HTTP/1.1 402 Payment Required"
+2025-09-23 06:22:33,920 - proxy.providers.chutes_provider - ERROR - Chutes API request failed for run None (model: zai-org/GLM-4.5-FP8): 402 - {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}
+2025-09-23 06:22:33,920 - proxy.providers.inference_manager - ERROR - Chutes inference failed for run None: status 402, response: {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}
+2025-09-23 06:22:33,921 - __main__ - INFO - Inference result raw: {'error': 'Error in inference request: {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}'}
+INFO:     172.22.0.2:58450 - "POST /agents/inference HTTP/1.1" 200 OK
+2025-09-23 06:22:37,029 - httpx - INFO - HTTP Request: POST https://llm.chutes.ai/v1/chat/completions "HTTP/1.1 402 Payment Required"
+2025-09-23 06:22:37,030 - proxy.providers.chutes_provider - ERROR - Chutes API request failed for run None (model: moonshotai/Kimi-K2-Instruct): 402 - {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}
+2025-09-23 06:22:37,031 - proxy.providers.inference_manager - ERROR - Chutes inference failed for run None: status 402, response: {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}
+2025-09-23 06:22:37,032 - __main__ - INFO - Inference result raw: {'error': 'Error in inference request: {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}'}
+INFO:     172.22.0.2:58466 - "POST /agents/inference HTTP/1.1" 200 OK
+2025-09-23 06:22:41,965 - httpx - INFO - HTTP Request: POST https://llm.chutes.ai/v1/chat/completions "HTTP/1.1 402 Payment Required"
+2025-09-23 06:22:41,966 - proxy.providers.chutes_provider - ERROR - Chutes API request failed for run None (model: deepseek-ai/DeepSeek-V3-0324): 402 - {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}
+2025-09-23 06:22:41,967 - proxy.providers.inference_manager - ERROR - Chutes inference failed for run None: status 402, response: {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}
+2025-09-23 06:22:41,967 - __main__ - INFO - Inference result raw: {'error': 'Error in inference request: {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}'}
+INFO:     172.22.0.2:41982 - "POST /agents/inference HTTP/1.1" 200 OK
+2025-09-23 06:22:49,647 - httpx - INFO - HTTP Request: POST https://llm.chutes.ai/v1/chat/completions "HTTP/1.1 402 Payment Required"
+2025-09-23 06:22:49,648 - proxy.providers.chutes_provider - ERROR - Chutes API request failed for run None (model: zai-org/GLM-4.5-FP8): 402 - {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}
+2025-09-23 06:22:49,649 - proxy.providers.inference_manager - ERROR - Chutes inference failed for run None: status 402, response: {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}
+2025-09-23 06:22:49,649 - __main__ - INFO - Inference result raw: {'error': 'Error in inference request: {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}'}
+INFO:     172.22.0.2:41986 - "POST /agents/inference HTTP/1.1" 200 OK
+2025-09-23 06:23:01,677 - httpx - INFO - HTTP Request: POST https://llm.chutes.ai/v1/chat/completions "HTTP/1.1 402 Payment Required"
+2025-09-23 06:23:01,678 - proxy.providers.chutes_provider - ERROR - Chutes API request failed for run None (model: moonshotai/Kimi-K2-Instruct): 402 - {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}
+2025-09-23 06:23:01,679 - proxy.providers.inference_manager - ERROR - Chutes inference failed for run None: status 402, response: {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}
+2025-09-23 06:23:01,679 - __main__ - INFO - Inference result raw: {'error': 'Error in inference request: {"detail":{"message":"Quota exceeded and account balance is $0.0, please pay with fiat or send tao to 5FXERFeLzvVHRGG7UGRZomXviWcJVmCmj7mv32N3UogKLvdA"}}'}
+INFO:     172.22.0.2:55198 - "POST /agents/inference HTTP/1.1" 200 OK
