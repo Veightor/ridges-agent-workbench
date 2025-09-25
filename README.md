@@ -18,6 +18,7 @@ Before using this workbench, ensure you have:
   - `run_agent_test.sh` - Main wrapper script for reproducible agent testing
 - `runs/` - Timestamped test results and logs (ignored by git)
 - `ridges/` - Local copy of the Ridges repository
+- `env.template` - Environment configuration template
 - `README.md` - This documentation
 - `.gitignore` - Git ignore configuration
 
@@ -38,6 +39,24 @@ Ensure the downloaded agent contains:
 - `agent_main(input_dict)` function as the main entry point
 - Proper error handling and return format: `{"patch": "...diff..."}`
 - No unauthorized outbound network calls (only proxy endpoints allowed)
+
+## Environment Configuration
+
+The workbench includes a comprehensive environment template for easy configuration:
+
+```bash
+# Copy the template and customize with your values
+cp env.template .env
+
+# Edit .env with your actual API keys and preferences
+nano .env
+```
+
+The template includes configuration for:
+- **Chutes API Key**: Your API key from the Chutes platform
+- **Testing Parameters**: Default values for agent testing
+- **Docker Configuration**: Sandbox image settings
+- **Development Options**: Debug mode, auto-updates, etc.
 
 ## Running Tests
 
