@@ -3,6 +3,7 @@
 ## Current Status ✅
 
 Your `ridges/` directory is now properly configured as a fork with:
+
 - **upstream**: `https://github.com/ridgesai/ridges.git` (original repo)
 - **origin**: (needs to be set to your fork)
 
@@ -36,6 +37,7 @@ git push -u origin main
 After setup, you'll have the ideal workflow:
 
 ### Pull Updates from Original Repo:
+
 ```bash
 cd ridges
 git fetch upstream
@@ -43,12 +45,14 @@ git merge upstream/main
 ```
 
 ### Push Your Changes to Your Fork:
+
 ```bash
-cd ridges  
+cd ridges
 git push origin main
 ```
 
 ### Your Changes Are Safe:
+
 - ✅ All your agent testing fixes preserved
 - ✅ Can pull upstream updates anytime
 - ✅ Can push to your own repository
@@ -57,6 +61,7 @@ git push origin main
 ## What You've Built 🏆
 
 Your fork contains:
+
 - Complete agent testing infrastructure
 - Docker sandbox environment
 - Chutes API integration
