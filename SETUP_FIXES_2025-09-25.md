@@ -5,6 +5,7 @@ This document outlines all the changes made to get the `run_agent_test.sh` scrip
 ## Initial Problem
 
 The `run_agent_test.sh` script was failing with:
+
 ```
 ModuleNotFoundError: No module named 'fiber'
 ```
@@ -14,12 +15,14 @@ ModuleNotFoundError: No module named 'fiber'
 ### 1. Python Dependencies Resolution
 
 **Problem**: Missing dependencies and version conflicts in virtual environment
-**Solution**: 
+**Solution**:
+
 - Upgraded pip to latest version (25.2)
 - Resolved botocore/aiobotocore version conflicts by allowing compatible versions
 - Installed missing `datadog-api-client` package
 
-**Files Modified**: 
+**Files Modified**:
+
 - Used existing `ridges/requirements.txt` with version conflict resolution
 - Added `datadog-api-client==2.43.0`
 
@@ -33,15 +36,17 @@ ModuleNotFoundError: No module named 'fiber'
 #### Created Files:
 
 **`ridges/validator/sandbox/__init__.py`**
+
 - Empty package initializer
 
 **`ridges/validator/sandbox/constants.py`**
+
 ```python
 # Docker image names
 SANDBOX_DOCKER_IMAGE = "sandbox-image"
 PROXY_DOCKER_IMAGE = "sandbox-proxy-image"
 
-# Network configuration  
+# Network configuration
 SANDBOX_NETWORK_NAME = "sandbox-network"
 PROXY_CONTAINER_NAME = "sandbox_proxy"
 
@@ -56,14 +61,17 @@ SANDBOX_OUTPUT_FILE = "/sandbox/output.json"
 ```
 
 **`ridges/validator/sandbox/schema.py`**
+
 - Pydantic models: `SandboxStatus`, `SandboxInput`, `SwebenchProblem`, `EvaluationRun`
 - Proper type definitions with UUID, datetime, Optional fields
 
-**`ridges/validator/sandbox/sandbox.py`** 
+**`ridges/validator/sandbox/sandbox.py`**
+
 - `get_sandbox_image_for_instance()` function
 - Basic `Sandbox` class for compatibility
 
 **`ridges/validator/sandbox/clone_repo.py`**
+
 - `clone_repo()` function for Git repository operations
 - Handles GitHub URL conversion and commit checkout
 
@@ -75,10 +83,12 @@ SANDBOX_OUTPUT_FILE = "/sandbox/output.json"
 **Solution**: Implemented fallback connection strategy
 
 **Files Modified**:
+
 - `ridges/validator/local_testing/setup.py`
 - `ridges/validator/local_testing/local_manager.py`
 
 **Changes**: Added Docker connection fallback logic:
+
 1. Try `docker.from_env()` (default)
 2. Try `~/.docker/run/docker.sock` (macOS Docker Desktop)
 3. Try `/var/run/docker.sock` (standard Linux)
@@ -91,6 +101,7 @@ SANDBOX_OUTPUT_FILE = "/sandbox/output.json"
 **Solution**: Built custom images
 
 **Commands Executed**:
+
 ```bash
 cd ridges/validator/sandbox && docker build -t sandbox-image .
 cd ridges/validator/sandbox/proxy && docker build -t sandbox-proxy-image .
@@ -103,7 +114,8 @@ cd ridges/validator/sandbox/proxy && docker build -t sandbox-proxy-image .
 **Problem**: `agent_runner.py` file not found in expected location
 **Solution**: Copied existing file to correct location
 
-**Command**: 
+**Command**:
+
 ```bash
 cp ridges/validator/problem_suites/AGENT_RUNNER.py ridges/validator/sandbox/agent_runner.py
 ```
@@ -152,37 +164,41 @@ cp ridges/validator/problem_suites/AGENT_RUNNER.py ridges/validator/sandbox/agen
 **Solution**: Updated `.env` files with working API key
 
 **Files Updated**:
+
 - `ridges/proxy/.env`
 - `ridges/ridges/proxy/.env`
 
-**API Key**: `cpk_10371523cc9f4c5d931dbab504102345.b7b754c0dcc156c5b0109d918b50f266.wNbf47AFg6x8RK1iyPxrBVFsDwGij0IA`
+**API Key**: ``
 
 **Why**: The system needs a valid Chutes API key with sufficient quota for inference and embedding requests during agent evaluation.
 
 ## Current Status
 
 ✅ **Fully Operational**: The `run_agent_test.sh` script now:
+
 - Starts proxy server with Chutes API integration
 - Creates Docker sandbox environment
-- Clones SWE-bench repositories  
+- Clones SWE-bench repositories
 - Applies test patches
 - Runs agent code in isolated containers
 - Facilitates agent ↔ proxy ↔ Chutes API communication
 
 ✅ **Network Architecture Working**:
+
 ```
-Agent Container (sandbox-image) 
+Agent Container (sandbox-image)
     ↓ HTTP requests
 Proxy Container (sandbox-proxy-image/nginx)
     ↓ Forward to host
 Host Proxy Server (FastAPI on localhost:8001)
-    ↓ API calls  
+    ↓ API calls
 Chutes AI API (llm.chutes.ai)
 ```
 
 ## Usage
 
 To run agent testing (after adding Chutes account funds):
+
 ```bash
 cd /path/to/ridges-agent-workbench
 ENV=dev bash scripts/run_agent_test.sh
